@@ -1,0 +1,8 @@
+**/node_modules
+**/*.swp
+**/*.swo
+**/.well-known
+**/.env
+**/package-lock.json
+**/dist*
+**/.git

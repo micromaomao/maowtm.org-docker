@@ -1,0 +1,4 @@
+cd ../schsrch
+npm run webpack-dev &
+cd ../maowtm.org
+node launcher.docker.js &
