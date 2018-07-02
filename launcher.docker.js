@@ -24,7 +24,7 @@ Maowtm({
     //   dir: path.join(__dirname, '../some-static-stuff/')
     // }
   ],
-	callback: err => {
+  callback: err => {
     if (err) {
       console.error(err)
       process.exit(1)
