@@ -14,7 +14,7 @@ COPY --chown=www:www ./components/schsrch/package.json ./schsrch/
 RUN for component in *; do \
       cd $component && \
       echo Doing npm i for $component && \
-      npm i --progress=false; \
+      script --return -qc "npm i" /dev/null; \
       if [ $? -ne 0 ]; then \
         echo npm i for $component failed.; \
         exit 1; \
@@ -28,7 +28,7 @@ COPY --chown=www:www ./components/ ./
 RUN for component in *; do \
       cd $component && \
       echo Doing npm i after copying for $component && \
-      npm i --progress=false; \
+      script --return -qc "npm i" /dev/null; \
       if [ $? -ne 0 ]; then \
         echo npm i for $component failed.; \
         exit 1; \
@@ -48,11 +48,13 @@ RUN for component in *; do \
     done;
 
 WORKDIR /usr/src/app/maowtm.org
-COPY ./launcher.docker.js ./dev-cmd ./
+COPY ./launcher.docker.js ./
+WORKDIR /usr/src/app/
+COPY ./dev-cmd ./run ./
 EXPOSE 80 443
 USER root
 # https://github.com/lovell/sharp/issues/892#issuecomment-319215167 :
-ENV LD_PRELOAD node_modules/sharp/vendor/lib/libz.so
+ENV LD_PRELOAD maowtm.org/node_modules/sharp/vendor/lib/libz.so
 STOPSIGNAL SIGTERM
 HEALTHCHECK --timeout=2s CMD curl -f https://localhost/
-CMD ["node", "launcher.docker.js"]
+CMD ["bash", "./run"]

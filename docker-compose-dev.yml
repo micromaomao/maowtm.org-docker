@@ -1,0 +1,48 @@
+version: '3'
+networks:
+  mw:
+    driver: bridge
+services:
+  www:
+    container_name: mw-www
+    build: .
+    networks:
+      - mw
+    ports:
+      - "127.0.0.1:80:80"
+      - "127.0.0.1:443:443"
+    environment:
+      NODE_ENV: development
+    stdin_open: true
+    tty: true
+    command: bash --init-file dev-cmd
+    depends_on:
+      - mongo
+      - redis
+      - es
+    volumes:
+      - ./components/maowtm.org:/usr/src/app/maowtm.org
+      - /usr/src/app/maowtm.org/node_modules
+  mongo:
+    container_name: mw-mongo
+    image: mongo:latest
+    networks:
+      - mw
+    volumes:
+      - /data/db
+      - /data/configdb
+    command: ["--noauth"]
+  redis:
+    container_name: mw-redis
+    image: redis:latest
+    networks:
+      - mw
+    volumes:
+      - /data
+  es:
+    container_name: mw-es
+    image: docker.elastic.co/elasticsearch/elasticsearch:6.3.0
+    networks:
+      - mw
+    volumes:
+      - /usr/share/elasticsearch/data

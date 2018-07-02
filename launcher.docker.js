@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 const Maowtm = require('./index')
 Maowtm({
   db: 'mongodb://mw-mongo/maowtm',
@@ -7,8 +8,8 @@ Maowtm({
     '0.0.0.0'
   ],
   ssl: {
-    key: 'local-dev-cert/server.key',
-    cert: 'local-dev-cert/server.crt'
+    key: './maowtm.org/local-dev-cert/server.key',
+    cert: './maowtm.org/local-dev-cert/server.crt'
     // ca: 'x3.crt'
   },
   apps: [
@@ -26,6 +27,7 @@ Maowtm({
 	callback: err => {
     if (err) {
       console.error(err)
+      process.exit(1)
       process.kill(process.pid, 'SIGKILL')
     }
     setTimeout(() => {
