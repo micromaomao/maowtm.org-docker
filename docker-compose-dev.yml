@@ -15,7 +15,7 @@ services:
       NODE_ENV: development
     stdin_open: true
     tty: true
-    command: bash --init-file dev-cmd
+    command: bash
     depends_on:
       - mongo
       - redis
