@@ -16,6 +16,10 @@ Maowtm({
     {
       hostname: 'schsrch.xyz',
       init: require('schsrch')
+    },
+    {
+      hostname: 'paper.sc',
+      init: require('schsrch')
     }
   ],
   rbs: [

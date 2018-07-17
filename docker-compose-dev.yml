@@ -23,6 +23,10 @@ services:
     volumes:
       - ./components/maowtm.org:/usr/src/app/maowtm.org
       - /usr/src/app/maowtm.org/node_modules
+      # imported from schsrch's docker-compose-example.yml
+      - ./components/schsrch/view:/usr/src/app/schsrch/view
+      - ./components/schsrch/test:/usr/src/app/schsrch/test
+      - ./components/schsrch/index.js:/usr/src/app/schsrch/index.js
   mongo:
     container_name: mw-mongo
     image: mongo:latest
