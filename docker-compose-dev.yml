@@ -45,7 +45,7 @@ services:
       - /data
   es:
     container_name: mw-es
-    image: docker.elastic.co/elasticsearch/elasticsearch:6.3.0
+    image: docker.elastic.co/elasticsearch/elasticsearch:6.5.3
     networks:
       - mw
     volumes:
