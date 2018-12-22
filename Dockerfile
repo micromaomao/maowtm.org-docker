@@ -4,13 +4,15 @@ WORKDIR /usr/src/app/
 RUN useradd --home-dir /usr/src/app -s /bin/false www && \
     chown -R www:www /usr/src/app && \
     apt-get update && \
-    apt-get install -y --no-install-recommends libpoppler-glib-dev && \
+    apt-get install -y --no-install-recommends libpoppler-glib-dev ghostscript && \
     rm -rf /var/lib/apt/lists/*
 USER www:www
 
 # Copy main package.json and build-components' package.json
 COPY --chown=www:www ./components/maowtm.org/package.json ./maowtm.org/
 COPY --chown=www:www ./components/schsrch/package.json ./schsrch/
+COPY --chown=www:www ./components/leafvote/package.json ./leafvote/
+COPY --chown=www:www ./components/fancy-lyric/package.json ./fancy-lyric/
 
 RUN for component in *; do \
       cd $component && \
@@ -55,7 +57,7 @@ COPY ./dev-cmd ./run ./
 EXPOSE 80 443
 USER root
 # https://github.com/lovell/sharp/issues/892#issuecomment-319215167 :
-ENV LD_PRELOAD maowtm.org/node_modules/sharp/vendor/lib/libz.so
+ENV LD_LIBRARY_PATH maowtm.org/node_modules/sharp/vendor/lib/
 ENV MONGODB=mongodb://mw-mongo/maowtm REDIS=mw-redis ES=mw-es:9200
 STOPSIGNAL SIGTERM
 HEALTHCHECK --timeout=2s CMD curl -f https://localhost/

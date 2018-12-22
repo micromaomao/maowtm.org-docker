@@ -20,6 +20,14 @@ Maowtm({
     {
       hostname: 'paper.sc',
       init: require('schsrch')
+    },
+    {
+      hostname: 'leafvote.mww.moe',
+      init: require('leafvote')
+    },
+    {
+      hostname: 'fancylyric.maowtm.org',
+      init: require('fancy-lyric')
     }
   ],
   rbs: [

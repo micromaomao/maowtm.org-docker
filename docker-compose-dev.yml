@@ -5,6 +5,7 @@ networks:
 services:
   www:
     container_name: mw-www
+    # image: maowtm/maowtm:latest
     build: .
     networks:
       - mw
@@ -21,12 +22,18 @@ services:
       - redis
       - es
     volumes:
-      - ./components/maowtm.org:/usr/src/app/maowtm.org
-      - /usr/src/app/maowtm.org/node_modules
-      # imported from schsrch's docker-compose-example.yml
-      - ./components/schsrch/view:/usr/src/app/schsrch/view
-      - ./components/schsrch/test:/usr/src/app/schsrch/test
-      - ./components/schsrch/index.js:/usr/src/app/schsrch/index.js
+      - ./components/maowtm.org/local-dev-cert:/usr/src/app/maowtm.org/local-dev-cert
+      # - ./components/maowtm.org:/usr/src/app/maowtm.org
+      # - /usr/src/app/maowtm.org/node_modules
+      # - ./components/schsrch/view:/usr/src/app/schsrch/view
+      # - ./components/schsrch/test:/usr/src/app/schsrch/test
+      # - ./components/schsrch/index.js:/usr/src/app/schsrch/index.js
+      # - ./components/leafvote/view:/usr/src/app/leafvote/view
+      # - ./components/maowtm.org/.well-known:/opt/.well-known
+    deploy:
+      restart_policy:
+        condition: any
+        delay: 1s
   mongo:
     container_name: mw-mongo
     image: mongo:latest
@@ -36,6 +43,10 @@ services:
       - /data/db
       - /data/configdb
     command: ["--noauth"]
+    deploy:
+      restart_policy:
+        condition: any
+        delay: 1s
   redis:
     container_name: mw-redis
     image: redis:latest
@@ -43,6 +54,10 @@ services:
       - mw
     volumes:
       - /data
+    deploy:
+      restart_policy:
+        condition: any
+        delay: 1s
   es:
     container_name: mw-es
     image: docker.elastic.co/elasticsearch/elasticsearch:6.5.3
@@ -50,3 +65,7 @@ services:
       - mw
     volumes:
       - /usr/share/elasticsearch/data
+    deploy:
+      restart_policy:
+        condition: any
+        delay: 1s
