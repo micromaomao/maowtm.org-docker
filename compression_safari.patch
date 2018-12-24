@@ -1,0 +1,29 @@
+diff --git a/index.js b/index.js
+index f190c68..699c7b5 100644
+--- a/index.js
++++ b/index.js
+@@ -173,13 +173,21 @@ function compression (options) {
+         return
+       }
+ 
++      debug(`Accept-Encoding: ${req.get('Accept-Encoding')}`)
++      debug(`User-Agent: ${req.get('User-Agent')}`)
++
+       // compression method
+       var accept = accepts(req)
+       var method = accept.encoding(['gzip', 'deflate', 'identity'])
+ 
+-      // we really don't prefer deflate
+-      if (method === 'deflate' && accept.encoding(['gzip'])) {
+-        method = accept.encoding(['gzip', 'identity'])
++      if (req.get('User-Agent').indexOf('Safari') >= 0) {
++        // Safari don't really support compression. (Error: can't decode raw data)
++        method = 'identity'
++      } else {
++        // we really don't prefer deflate
++        if (method === 'deflate' && accept.encoding(['gzip'])) {
++          method = accept.encoding(['gzip', 'identity'])
++        }
+       }
+ 
+       // negotiation failed

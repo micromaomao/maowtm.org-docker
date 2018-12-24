@@ -61,4 +61,9 @@ ENV LD_LIBRARY_PATH maowtm.org/node_modules/sharp/vendor/lib/
 ENV MONGODB=mongodb://mw-mongo/maowtm REDIS=mw-redis ES=mw-es:9200
 STOPSIGNAL SIGTERM
 HEALTHCHECK --timeout=2s CMD curl -f https://localhost/
+
+COPY ./compression_safari.patch ./
+RUN cd /usr/src/app/maowtm.org/node_modules/compression && \
+    patch index.js /usr/src/app/compression_safari.patch
+
 CMD ["bash", "./run"]
