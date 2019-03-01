@@ -5,8 +5,8 @@ networks:
 services:
   www:
     container_name: mw-www
-    # image: maowtm/maowtm:latest
-    build: .
+    image: maowtm/maowtm:latest
+    # build: .
     networks:
       - mw
     ports:
@@ -24,6 +24,7 @@ services:
     volumes:
       - ./components/maowtm.org/local-dev-cert:/usr/src/app/maowtm.org/local-dev-cert
       # - ./components/maowtm.org:/usr/src/app/maowtm.org
+      # - ./components/maowtm.org/index.js:/usr/src/app/maowtm.org/index.js
       # - /usr/src/app/maowtm.org/node_modules
       # - ./components/schsrch/view:/usr/src/app/schsrch/view
       # - ./components/schsrch/test:/usr/src/app/schsrch/test
@@ -60,7 +61,7 @@ services:
         delay: 1s
   es:
     container_name: mw-es
-    image: docker.elastic.co/elasticsearch/elasticsearch:6.5.3
+    image: docker.elastic.co/elasticsearch/elasticsearch:6.5.4
     networks:
       - mw
     volumes:

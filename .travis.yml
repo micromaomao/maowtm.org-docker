@@ -1,0 +1,30 @@
+sudo: no
+dist: stretch
+group: edge
+services:
+  - docker
+
+script:
+  - >
+    mkdir components &&
+    cd components &&
+    git clone https://github.com/micromaomao/fancy-lyric.git &&
+    git clone https://github.com/micromaomao/leafvote.git &&
+    git clone https://github.com/micromaomao/maowtm.org.git &&
+    git clone https://github.com/micromaomao/schsrch.git &&
+    cd ..
+  - docker build . -t maowtm/maowtm --no-cache
+  - cd components/maowtm.org/local-dev-cert && make && cd ../../..
+  - >
+    for cmd in \
+      "cd maowtm.org && npm run test" \
+      "cd schsrch && test/perpareDatabase.sh && npm run test"; do \
+      docker-compose -f docker-compose-dev.yml up -d es mongo redis &&
+      sleep 20 &&
+      docker run --entrypoint=bash --user=www -it --network maowtmorg-docker_mw maowtm/maowtm -c "$cmd" &&
+      docker-compose -f docker-compose-dev.yml down &&
+      docker container prune -f && docker volume prune -f;
+      if [ $? -ne 0 ]; then
+        exit 1;
+      fi;
+    done;
