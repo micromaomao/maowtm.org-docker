@@ -21,13 +21,19 @@ script:
       "cd schsrch && test/perpareDatabase.sh && npm run test"; do \
       docker-compose -f docker-compose-dev.yml up -d es mongo redis &&
       sleep 20 &&
-      docker run --entrypoint=bash --user=www -it --network maowtmorg-docker_mw maowtm/maowtm -c "$cmd" &&
+      docker run --entrypoint=bash --user=www --network maowtmorg-docker_mw maowtm/maowtm -c "$cmd" &&
       docker-compose -f docker-compose-dev.yml down &&
       docker container prune -f && docker volume prune -f;
       if [ $? -ne 0 ]; then
         exit 1;
       fi;
     done;
+  - >
+    docker-compose -f docker-compose-dev.yml up -d es mongo redis &&
+    sleep 20 &&
+    docker run --entrypoint=bash --network maowtmorg-docker_mw -P3000:80 maowtm/maowtm -c "./maowtm.org/launcher.docker.js" </dev/null &;
+    sleep 10 &&
+    curl -vI 'http://127.0.0.1:3000'
 
 deploy:
   provider: script
