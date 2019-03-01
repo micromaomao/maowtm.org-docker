@@ -21,7 +21,7 @@ script:
       "cd schsrch && test/perpareDatabase.sh && npm run test"; do \
       docker-compose -f docker-compose-dev.yml up -d es mongo redis &&
       sleep 20 &&
-      docker run --entrypoint=bash --user=www --network maowtmorg-docker_mw maowtm/maowtm -c "$cmd" &&
+      docker run --entrypoint=bash -t --user=www --network maowtmorg-docker_mw maowtm/maowtm -c "$cmd" &&
       docker-compose -f docker-compose-dev.yml down &&
       docker container prune -f && docker volume prune -f;
       if [ $? -ne 0 ]; then
