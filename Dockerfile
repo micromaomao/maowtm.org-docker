@@ -17,7 +17,7 @@ COPY --chown=www:www ./components/fancy-lyric/package.json ./fancy-lyric/
 RUN for component in *; do \
       cd $component && \
       echo Doing npm i for $component && \
-      npm i --progress=false --loglevel=info 2>&1; \
+      npm i --progress=false --loglevel=warn 2>&1; \
       if [ $? -ne 0 ]; then \
         echo npm i for $component failed.; \
         exit 1; \
@@ -31,7 +31,7 @@ COPY --chown=www:www ./components/ ./
 RUN for component in *; do \
       cd $component && \
       echo Doing npm i after copying for $component && \
-      npm i --progress=false --loglevel=info 2>&1; \
+      npm i --progress=false --loglevel=warn 2>&1; \
       if [ $? -ne 0 ]; then \
         echo npm i for $component failed.; \
         exit 1; \
