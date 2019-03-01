@@ -28,3 +28,11 @@ script:
         exit 1;
       fi;
     done;
+
+deploy:
+  provider: script
+  script: >
+    echo "$DOCKERHUB_PASSWORD" | docker login -u "maowtm" --password-stdin &&
+    docker push maowtm/maowtm
+  on:
+    branch: master
