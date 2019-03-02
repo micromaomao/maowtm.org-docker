@@ -12,10 +12,9 @@ script:
     git clone https://github.com/micromaomao/leafvote.git &&
     git clone https://github.com/micromaomao/maowtm.org.git &&
     git clone https://github.com/micromaomao/schsrch.git &&
-    cd ..
-  - docker build . -t maowtm/maowtm --no-cache
-  - cd components/maowtm.org/local-dev-cert && make && cd ../../..
-  - >
+    cd .. &&
+    docker build . -t maowtm/maowtm --no-cache &&
+    cd components/maowtm.org/local-dev-cert && make && cd ../../.. &&
     for cmd in \
       "cd maowtm.org && npm run test" \
       "cd schsrch && test/perpareDatabase.sh && npm run test"; do \
@@ -28,8 +27,10 @@ script:
         exit 1;
       fi;
     done;
-  - >
-    docker-compose -f docker-compose-dev.yml up -d es mongo redis &&
+    docker-compose -f docker-compose-dev.yml up -d es mongo redis;
+    if [ $? -ne 0 ]; then
+      exit 1;
+    fi;
     sleep 20;
     docker run --entrypoint=bash --network maowtmorg-docker_mw -p 3000:80 -v $(pwd)/components/maowtm.org/local-dev-cert:/usr/src/app/maowtm.org/local-dev-cert maowtm/maowtm -c "./maowtm.org/launcher.docker.js" </dev/null &
     sleep 10 &&
