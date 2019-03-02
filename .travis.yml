@@ -14,6 +14,7 @@ script:
     git clone https://github.com/micromaomao/maowtm.org.git &&
     git clone https://github.com/micromaomao/schsrch.git &&
     cd .. &&
+    chmod u=rwX,go=rX -R . &&
     docker build . -t maowtm/maowtm --no-cache &&
     cd components/maowtm.org/local-dev-cert && make && cd ../../.. &&
     for cmd in \
