@@ -35,7 +35,7 @@ script:
     fi;
     sleep 40;
     docker run --entrypoint=bash --network maowtmorg-docker_mw -p 3000:80 -v $(pwd)/components/maowtm.org/local-dev-cert:/usr/src/app/maowtm.org/local-dev-cert maowtm/maowtm -c "./maowtm.org/launcher.docker.js" </dev/null &
-    sleep 10 &&
+    sleep 30 &&
     curl -vI 'http://127.0.0.1:3000'
 
 deploy:
