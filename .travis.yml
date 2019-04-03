@@ -34,8 +34,8 @@ script:
       exit 1;
     fi;
     sleep 40;
-    docker run --entrypoint=bash --network maowtmorg-docker_mw -p 3000:80 -v $(pwd)/components/maowtm.org/local-dev-cert:/usr/src/app/maowtm.org/local-dev-cert maowtm/maowtm -c "./maowtm.org/launcher.docker.js" </dev/null &
-    sleep 120 &&
+    docker run --entrypoint=bash --network maowtmorg-docker_mw -p 3000:80 -v $(pwd)/components/maowtm.org/local-dev-cert:/usr/src/app/maowtm.org/local-dev-cert maowtm/maowtm -c "rm ./maowtm.org/static/imgs/* -rf && ./maowtm.org/launcher.docker.js" </dev/null &
+    sleep 40 &&
     curl -vI 'http://127.0.0.1:3000'
 
 deploy:
