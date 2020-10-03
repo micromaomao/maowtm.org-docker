@@ -8,29 +8,10 @@ RUN useradd --home-dir /usr/src/app -s /bin/false www && \
     rm -rf /var/lib/apt/lists/*
 USER www:www
 
-# Copy main package.json and build-components' package.json
-COPY --chown=www:www ./components/maowtm.org/package.json ./maowtm.org/
-COPY --chown=www:www ./components/schsrch/package.json ./schsrch/
-COPY --chown=www:www ./components/leafvote/package.json ./leafvote/
-COPY --chown=www:www ./components/fancy-lyric/package.json ./fancy-lyric/
-
+COPY --chown=www:www ./components/ ./
 RUN for component in *; do \
       cd $component && \
       echo Doing npm i for $component && \
-      npm i --progress=false --loglevel=warn 2>&1; \
-      if [ $? -ne 0 ]; then \
-        echo npm i for $component failed.; \
-        exit 1; \
-      fi; \
-      cd ..; \
-    done
-
-# COPY app source
-COPY --chown=www:www ./components/ ./
-# Run npm i again to bulld gyp modules, webpack assets and stuff.
-RUN for component in *; do \
-      cd $component && \
-      echo Doing npm i after copying for $component && \
       npm i --progress=false --loglevel=warn 2>&1; \
       if [ $? -ne 0 ]; then \
         echo npm i for $component failed.; \
@@ -61,9 +42,5 @@ ENV LD_LIBRARY_PATH maowtm.org/node_modules/sharp/vendor/lib/
 ENV MONGODB=mongodb://mw-mongo/maowtm REDIS=mw-redis ES=mw-es:9200
 STOPSIGNAL SIGTERM
 HEALTHCHECK --timeout=2s CMD curl -f https://localhost/
-
-COPY ./compression_safari.patch ./
-RUN cd /usr/src/app/maowtm.org/node_modules/compression && \
-    patch index.js /usr/src/app/compression_safari.patch
 
 CMD ["bash", "./run"]
