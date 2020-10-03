@@ -19,7 +19,7 @@ script:
     cd components/maowtm.org/local-dev-cert && make && cd ../../.. &&
     for cmd in \
       "cd maowtm.org && npm run test" \
-      "cd schsrch && test/perpareDatabase.sh && npm run test"; do \
+      "cd schsrch && test/prepareDatabase.sh && npm run test"; do \
       docker-compose -f docker-compose-dev.yml up -d es mongo redis &&
       sleep 40 &&
       docker run --entrypoint=bash -t --user=www --network maowtmorg-docker_mw maowtm/maowtm -c "$cmd" &&
