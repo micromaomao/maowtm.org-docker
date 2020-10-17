@@ -13,6 +13,7 @@ script:
     git clone https://github.com/micromaomao/leafvote.git &&
     git clone https://github.com/micromaomao/maowtm.org.git &&
     git clone https://github.com/micromaomao/schsrch.git &&
+    git clone https://gitlab.com/wtm/trello-simple-timetrack.git &&
     cd .. &&
     chmod u=rwX,go=rX -R . &&
     docker build . -t maowtm/maowtm --no-cache &&

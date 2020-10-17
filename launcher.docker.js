@@ -28,6 +28,10 @@ Maowtm({
     {
       hostname: 'fancylyric.maowtm.org',
       init: require('fancy-lyric')
+    },
+    {
+      hostname: 'trello-simple-timetrack.maowtm.org',
+      init: require('trello-simple-timetrack')
     }
   ],
   rbs: [
