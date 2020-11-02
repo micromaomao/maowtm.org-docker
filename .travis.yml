@@ -1,5 +1,4 @@
 sudo: no
-dist: stretch
 group: edge
 language: generic
 services:
