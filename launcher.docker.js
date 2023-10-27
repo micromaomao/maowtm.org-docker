@@ -14,25 +14,21 @@ Maowtm({
   },
   apps: [
     {
-      hostname: 'schsrch.xyz',
-      init: require('schsrch')
-    },
-    {
       hostname: 'paper.sc',
       init: require('schsrch')
     },
-    {
-      hostname: 'leafvote.mww.moe',
-      init: require('leafvote')
-    },
-    {
-      hostname: 'fancylyric.maowtm.org',
-      init: require('fancy-lyric')
-    },
-    {
-      hostname: 'trello-simple-timetrack.maowtm.org',
-      init: require('trello-simple-timetrack')
-    }
+    // {
+    //   hostname: 'leafvote.mww.moe',
+    //   init: require('leafvote')
+    // },
+    // {
+    //   hostname: 'fancylyric.maowtm.org',
+    //   init: require('fancy-lyric')
+    // },
+    // {
+    //   hostname: 'trello-simple-timetrack.maowtm.org',
+    //   init: require('trello-simple-timetrack')
+    // }
   ],
   rbs: [
     // {
