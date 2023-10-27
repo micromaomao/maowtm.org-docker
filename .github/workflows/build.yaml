@@ -16,6 +16,7 @@ jobs:
           cd components &&
           git clone https://github.com/micromaomao/maowtm.org.git &&
           git clone https://github.com/micromaomao/schsrch.git &&
+          git clone https://github.com/micromaomao/leafvote.git &&
           cd .. &&
           chmod u=rwX,go=rX -R . &&
           docker build . -t maowtm/maowtm --no-cache &&
