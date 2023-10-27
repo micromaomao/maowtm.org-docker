@@ -5,7 +5,7 @@ networks:
 services:
   www:
     container_name: mw-www
-    image: maowtm/maowtm:latest
+    image: ghcr.io/micromaomao/maowtm.org-docker:latest
     # build: .
     networks:
       - mw
@@ -19,17 +19,19 @@ services:
     command: bash
     depends_on:
       - mongo
-      - redis
       - es
     volumes:
       - ./components/maowtm.org/local-dev-cert:/usr/src/app/maowtm.org/local-dev-cert
       # - ./components/maowtm.org:/usr/src/app/maowtm.org
       # - ./components/maowtm.org/index.js:/usr/src/app/maowtm.org/index.js
       # - /usr/src/app/maowtm.org/node_modules
-      # - ./components/schsrch/view:/usr/src/app/schsrch/view
-      # - ./components/schsrch/test:/usr/src/app/schsrch/test
-      # - ./components/schsrch/index.js:/usr/src/app/schsrch/index.js
-      # - ./components/leafvote/view:/usr/src/app/leafvote/view
+      - ./components/schsrch/view:/usr/src/app/schsrch/view
+      - ./components/schsrch/test:/usr/src/app/schsrch/test
+      - ./components/schsrch/lib:/usr/src/app/schsrch/lib
+      - ./components/schsrch/index.js:/usr/src/app/schsrch/index.js
+      - ./components/schsrch/webpack.config.js:/usr/src/app/schsrch/webpack.config.js
+      - ./components/leafvote/view:/usr/src/app/leafvote/view
+      - ./components/leafvote/webpack.config.js:/usr/src/app/leafvote/webpack.config.js
       # - ./components/maowtm.org/.well-known:/opt/.well-known
     deploy:
       restart_policy:
@@ -44,17 +46,6 @@ services:
       - /data/db
       - /data/configdb
     command: ["--noauth"]
-    deploy:
-      restart_policy:
-        condition: any
-        delay: 1s
-  redis:
-    container_name: mw-redis
-    image: redis:latest
-    networks:
-      - mw
-    volumes:
-      - /data
     deploy:
       restart_policy:
         condition: any

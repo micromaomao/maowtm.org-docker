@@ -39,7 +39,7 @@ EXPOSE 80 443
 USER root
 # https://github.com/lovell/sharp/issues/892#issuecomment-319215167 :
 ENV LD_LIBRARY_PATH maowtm.org/node_modules/sharp/vendor/lib/
-ENV MONGODB=mongodb://mw-mongo/maowtm REDIS=mw-redis ES=mw-es:9200
+ENV MONGODB=mongodb://mw-mongo/maowtm ES=mw-es:9200
 STOPSIGNAL SIGTERM
 HEALTHCHECK --timeout=2s CMD curl -f https://localhost/
 

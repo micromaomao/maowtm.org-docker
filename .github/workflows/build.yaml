@@ -26,7 +26,7 @@ jobs:
           for cmd in \
             "cd maowtm.org && npm run test" \
             "cd schsrch && test/prepareDatabase.sh && npm run test"; do \
-            docker-compose -f docker-compose-dev.yml up -d es mongo redis &&
+            docker-compose -f docker-compose-dev.yml up -d es mongo &&
             sleep 40 &&
             docker run --entrypoint=bash -t --user=www --network maowtmorg-docker_mw $IMAGE_TAG -c "$cmd" &&
             docker-compose -f docker-compose-dev.yml down &&
@@ -35,7 +35,7 @@ jobs:
               exit 1;
             fi;
           done;
-          docker-compose -f docker-compose-dev.yml up -d es mongo redis;
+          docker-compose -f docker-compose-dev.yml up -d es mongo;
           if [ $? -ne 0 ]; then
             exit 1;
           fi;
