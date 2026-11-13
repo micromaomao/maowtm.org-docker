@@ -14,35 +14,33 @@ jobs:
       - name: Export variables
         run: echo "IMAGE_TAG=ghcr.io/micromaomao/maowtm.org-docker" >> $GITHUB_ENV
       - name: Build script
-        run: >
-          mkdir components &&
-          cd components &&
-          git clone https://github.com/micromaomao/maowtm.org.git &&
-          git clone https://github.com/micromaomao/schsrch.git &&
-          git clone https://github.com/micromaomao/leafvote.git &&
-          cd .. &&
-          chmod u=rwX,go=rX -R . &&
-          docker build . -t $IMAGE_TAG --no-cache &&
-          cd components/maowtm.org/local-dev-cert && make && cd ../../.. &&
+        env:
+          COMPOSE_PROJECT_NAME: maowtmorg-docker
+        run: |
+          mkdir components
+          (
+            cd components || exit 1
+            git clone https://github.com/micromaomao/maowtm.org.git
+            git clone https://github.com/micromaomao/schsrch.git
+            git clone https://github.com/micromaomao/leafvote.git
+          )
+          chmod u=rwX,go=rX -R .
+          docker build . -t "$IMAGE_TAG" --no-cache
+          make -C components/maowtm.org/local-dev-cert
           for cmd in \
             "cd maowtm.org && npm run test" \
-            "cd schsrch && test/prepareDatabase.sh && npm run test"; do \
-            docker-compose -f docker-compose-dev.yml up -d es mongo &&
-            sleep 40 &&
-            docker run --entrypoint=bash -t --user=www --network maowtmorg-docker_mw $IMAGE_TAG -c "$cmd" &&
-            docker-compose -f docker-compose-dev.yml down &&
-            docker container prune -f && docker volume prune -f;
-            if [ $? -ne 0 ]; then
-              exit 1;
-            fi;
-          done;
-          docker-compose -f docker-compose-dev.yml up -d es mongo;
-          if [ $? -ne 0 ]; then
-            exit 1;
-          fi;
-          sleep 40;
-          docker run --entrypoint=bash --network maowtmorg-docker_mw -p 3000:80 -v $(pwd)/components/maowtm.org/local-dev-cert:/usr/src/app/maowtm.org/local-dev-cert $IMAGE_TAG -c "rm ./maowtm.org/static/imgs/* -rf && ./maowtm.org/launcher.docker.js" </dev/null &
-          sleep 40 &&
+            "cd schsrch && test/prepareDatabase.sh && npm run test"; do
+            docker compose -f docker-compose-dev.yml up -d es mongo
+            sleep 40
+            docker run --entrypoint=bash -t --user=www --network maowtmorg-docker_mw "$IMAGE_TAG" -c "$cmd"
+            docker compose -f docker-compose-dev.yml down
+            docker container prune -f
+            docker volume prune -f
+          done
+          docker compose -f docker-compose-dev.yml up -d es mongo
+          sleep 40
+          docker run --entrypoint=bash --network maowtmorg-docker_mw -p 3000:80 -v "$(pwd)/components/maowtm.org/local-dev-cert:/usr/src/app/maowtm.org/local-dev-cert" "$IMAGE_TAG" -c "rm ./maowtm.org/static/imgs/* -rf && ./maowtm.org/launcher.docker.js" </dev/null &
+          sleep 40
           curl -vI 'http://127.0.0.1:3000'
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v1

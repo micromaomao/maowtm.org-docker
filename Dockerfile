@@ -1,4 +1,4 @@
-FROM node:lts
+FROM node:20-bookworm
 
 WORKDIR /usr/src/app/
 RUN useradd --home-dir /usr/src/app -s /bin/false www && \
